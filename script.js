@@ -12,6 +12,10 @@ const textAreaId = document.querySelector('.text-area-id');
 const myFormAllUsers = document.querySelector('.all-users-form');
 const textAreaAllUsers = document.querySelector('.text-area-all-users');
 
+const myFormNewUser = document.querySelector('.new-user-form');
+const nameNewUser = document.querySelector('#nameUser');
+const emailNewUser = document.querySelector('#emailUser');
+const ageNewUser = document.querySelector('#ageUser');
 
 const getMessage = () => {
     fetch(`${BaseURL}/getMessage`).then((res) => {
@@ -36,20 +40,9 @@ const sendMessage = () => {
     })
 };
 
-const sendIdUser = () => {
-    const data = idUser.value;
-    fetch(`${BaseURL}/user`, {
-        method: 'POST',
-        body: data,
-    }).then(() => {
-        idUser.value = '';
-        getUser(data);
-    }).catch((err) => {
-        console.error(err);
-    })
-};
 
-const getUser = (data) => {
+const getUser = () => {
+    const data = idUser.value;
     fetch(`${BaseURL}/user/${data}`).then((res) => {
         return res.text();
     }).then((data) => {
@@ -60,7 +53,7 @@ const getUser = (data) => {
 };
 
 const getAllUser = () => {
-    fetch(`${BaseURL}/user`).then((res) => {
+    fetch(`${BaseURL}/users`).then((res) => {
         return res.text();
     }).then((data) => {
         textAreaAllUsers.innerHTML = data;
@@ -70,6 +63,25 @@ const getAllUser = () => {
 };
 
 
+const sendNewUser = () => {
+    const data = {
+        name: nameNewUser.value,
+        email: emailNewUser.value,
+        age: ageNewUser.value
+    };
+    fetch(`${BaseURL}/user`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+    }).then(() => {
+        nameNewUser.value = '';
+        emailNewUser.value = '';
+        ageNewUser.value = '';
+
+    }).catch((err) => {
+        console.error(err);
+    })
+};
+
 myFormText.addEventListener('submit', (e) => {
     e.preventDefault();
     sendMessage();
@@ -77,12 +89,17 @@ myFormText.addEventListener('submit', (e) => {
 
 myFormId.addEventListener('submit', (e) => {
     e.preventDefault();
-    sendIdUser();
+    getUser();
 });
 
 myFormAllUsers.addEventListener('submit', (e) => {
     e.preventDefault();
     getAllUser();
+});
+
+myFormNewUser.addEventListener('submit', (e) => {
+    e.preventDefault();
+    sendNewUser();
 });
 
 window.onload = () => {
