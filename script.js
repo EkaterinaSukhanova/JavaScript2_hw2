@@ -1,13 +1,16 @@
 'use strict';
 const BaseURL = 'http://127.0.0.1:156';
-const textAreaMessage = document.querySelector('.text-area-message');
-const textAreaId = document.querySelector('.text-area-id');
 
 const myFormText = document.querySelector('.text-form');
 const myText = document.querySelector('#myText');
+const textAreaMessage = document.querySelector('.text-area-message');
 
 const myFormId = document.querySelector('.id-form');
 const idUser = document.querySelector('#idUser');
+const textAreaId = document.querySelector('.text-area-id');
+
+const myFormAllUsers = document.querySelector('.all-users-form');
+const textAreaAllUsers = document.querySelector('.text-area-all-users');
 
 
 const getMessage = () => {
@@ -33,9 +36,6 @@ const sendMessage = () => {
     })
 };
 
-
-
-
 const sendIdUser = () => {
     const data = idUser.value;
     fetch(`${BaseURL}/user`, {
@@ -59,6 +59,15 @@ const getUser = (data) => {
     })
 };
 
+const getAllUser = () => {
+    fetch(`${BaseURL}/user`).then((res) => {
+        return res.text();
+    }).then((data) => {
+        textAreaAllUsers.innerHTML = data;
+    }).catch((err) => {
+        console.error(err);
+    })
+};
 
 
 myFormText.addEventListener('submit', (e) => {
@@ -69,6 +78,11 @@ myFormText.addEventListener('submit', (e) => {
 myFormId.addEventListener('submit', (e) => {
     e.preventDefault();
     sendIdUser();
+});
+
+myFormAllUsers.addEventListener('submit', (e) => {
+    e.preventDefault();
+    getAllUser();
 });
 
 window.onload = () => {
